@@ -1,0 +1,28 @@
+{
+  "name": "nb-react",
+  "version": "1.0.0",
+  "description": "从0到1实现react18",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ext .js,.ts,.jsx,.tsx --fix --quiet ./packages"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "commitlint": "^17.7.1",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.2"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "typescript": "^5.1.6"
+  }
+}
