@@ -69,5 +69,5 @@ function childReconciler(shouldTrackEffects: boolean) {
 	};
 }
 
-export const reconcileChildFibers = childReconciler(false);
-export const mountChildFibers = childReconciler(true);
+export const reconcileChildFibers = childReconciler(true);
+export const mountChildFibers = childReconciler(false);

@@ -43,15 +43,15 @@ function updateHostRoot(wip: FiberNode) {
 }
 
 function updateHostComponent(wip: FiberNode) {
-	const nextChildren = renderWithHooks(wip);
+	const nextProp = wip.pendingProps;
+	const nextChildren = nextProp.children;
 	reconcileChildren(wip, nextChildren);
 	return wip.child;
 }
 
 // function App(){ return <div>2</div>}
 function updateFunctionComponent(wip: FiberNode) {
-	const nextProp = wip.pendingProps;
-	const nextChildren = nextProp.children;
+	const nextChildren = renderWithHooks(wip);
 	reconcileChildren(wip, nextChildren);
 	return wip.child;
 }

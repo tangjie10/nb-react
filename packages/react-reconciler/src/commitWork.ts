@@ -72,6 +72,7 @@ function getHostParent(fiber: FiberNode) {
 	if (__DEV__) {
 		console.log('未找到parent');
 	}
+	return null;
 }
 
 function appendPlacementNodeIntoContainer(
