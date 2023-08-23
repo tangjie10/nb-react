@@ -17,7 +17,6 @@
 		"noImplicitReturns": false,
 		"skipLibCheck": true,
 		"baseUrl": "./packages", //ts校验的入口
-		"noImplicitAny": false,
 		"paths": {
 			"hostConfig": ["./react-dom/src/hostConfig.ts"]
 		}
