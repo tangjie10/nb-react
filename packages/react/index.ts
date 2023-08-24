@@ -1,3 +1,4 @@
+import { REACT_ELEMENT_TYPE } from 'shared/ReactSymbols';
 import currentDispatcher, {
 	Dispatcher,
 	resolveDispatcher
@@ -21,3 +22,11 @@ export const _SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
 export const version = '0.0.1';
 
 export const createElement = jsx;
+
+export const isValidElement = (object: any) => {
+	return (
+		typeof object === 'object' &&
+		object !== null &&
+		object.$$typeof === REACT_ELEMENT_TYPE
+	);
+};

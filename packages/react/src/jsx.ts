@@ -43,7 +43,7 @@ export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 
 		if (prop === 'ref') {
 			if (val !== undefined) {
-				ref = '' + val;
+				ref = val;
 			}
 			continue;
 		}
@@ -51,15 +51,14 @@ export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 		if ({}.hasOwnProperty.call(config, prop)) {
 			props[prop] = val;
 		}
-
-		const maybeChildrenLength = maybeChildren.length;
-		// [child] => child   [child,child]=>[child,child]
-		if (maybeChildrenLength) {
-			if (maybeChildrenLength === 1) {
-				props.children = maybeChildren[0];
-			} else {
-				props.children = maybeChildren;
-			}
+	}
+	const maybeChildrenLength = maybeChildren.length;
+	// [child] => child   [child,child]=>[child,child]
+	if (maybeChildrenLength) {
+		if (maybeChildrenLength === 1) {
+			props.children = maybeChildren[0];
+		} else {
+			props.children = maybeChildren;
 		}
 	}
 
@@ -82,7 +81,7 @@ export const jsxDEV = (type: ElementType, config: any) => {
 
 		if (prop === 'ref') {
 			if (val !== undefined) {
-				ref = '' + val;
+				ref = val;
 			}
 			continue;
 		}
