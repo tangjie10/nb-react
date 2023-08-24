@@ -20,4 +20,4 @@ export const _SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = {
 
 export const version = '0.0.1';
 
-export const createELement = jsx;
+export const createElement = jsx;
