@@ -69,7 +69,6 @@ export const jsxDEV = (type: ElementType, config: any) => {
 	let key: Key = null;
 	const props: Props = {};
 	let ref: Ref = null;
-
 	for (const prop in config) {
 		const val = config[prop];
 		if (prop === 'key') {

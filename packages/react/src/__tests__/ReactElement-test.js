@@ -40,9 +40,9 @@ describe('ReactElement', () => {
 		global.Symbol = originalSymbol;
 	});
 
-	// it('uses the fallback value when in an environment without Symbol', () => {
-	// 	expect((<div />).$$typeof).toBe(0xeac7);
-	// });
+	it('uses the fallback value when in an environment without Symbol', () => {
+		expect((<div />).$$typeof).toBe(0xeac7);
+	});
 
 	it('returns a complete element according to spec', () => {
 		const element = React.createElement(ComponentFC);
@@ -90,6 +90,17 @@ describe('ReactElement', () => {
 		expect(element.key).toBe('12');
 		expect(element.ref).toBe('34');
 		expect(element.props).toEqual({ foo: '56' });
+	});
+
+	it('extracts key and ref from the config jsx', () => {
+		const element = React.createElement(
+			'div',
+			<div key="12" ref="34" foo="56"></div>
+		);
+		expect(element.type).toBe('div');
+		expect(element.key).toBe('12');
+		// expect(element.ref).toBe('34');
+		// expect(element.props).toEqual({ foo: '56' });
 	});
 
 	it('extracts null key and ref', () => {

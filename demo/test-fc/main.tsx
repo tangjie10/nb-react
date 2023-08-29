@@ -1,34 +1,30 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 
-function renderIntoDocument(element) {
-	const div = document.createElement('div');
-	return ReactDOM.createRoot(div).render(element);
+const rootHost = ReactDOM.createRoot(
+	document.getElementById('root') as Element
+);
+
+console.log([
+	<li key="1" ref="333">
+		1
+	</li>,
+	<li key="2">2</li>,
+	<li key="3">3</li>
+]);
+function App() {
+	const [name, setName] = useState('child');
+	const [num, setNum] = useState(0);
+	const arr =
+		num % 2 === 0
+			? [<li key="1">1</li>, <li key="2">2</li>, <li key="3">3</li>]
+			: [<li key="3">3</li>, <li key="2">2</li>, <li key="1">1</li>];
+	window.setName = setName;
+	return <ul onClickCapture={() => setNum(num + 1)}>{arr}</ul>;
 }
 
-// const rootHost = ReactDOM.createRoot(
-// 	document.getElementById('root') as Element
-// );
-
-// console.log('222222222');
-
-// function App() {
-// 	const [name, setName] = useState('tj');
-// 	return (
-// 		<div>
-// 			<Child name={name}></Child>
-// 		</div>
-// 	);
-// }
-
-// function Child(props) {
-// 	return <div>{props.name}</div>;
-// }
-
-// rootHost.render(<App />);
-
-function Test(props) {
-	return <div>{props.value}</div>;
+function Child() {
+	return <div>nb-child</div>;
 }
 
-console.log(renderIntoDocument(<Test value={+undefined} />));
+rootHost.render(<App />);

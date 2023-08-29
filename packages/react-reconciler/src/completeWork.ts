@@ -12,36 +12,51 @@ import {
 	HostRoot,
 	HostText
 } from './workTags';
-import { NoFlags } from './fiberFlags';
+import { NoFlags, Update } from './fiberFlags';
+import { updateFiberProps } from 'react-dom/src/SyntheicEvent';
+
+function markUpdate(fiber: FiberNode) {
+	fiber.flags |= Update;
+}
 
 //递归中的归
 export const completeWork = (wip: FiberNode) => {
 	const newProps = wip.pendingProps;
 	const current = wip.alternate;
-
+	console.warn('---------------');
 	switch (wip.tag) {
 		case HostComponent:
 			if (current !== null && wip.stateNode) {
 				//updata
+				//1. props 是否有变化 有变化打update标记 并且保存下来
+				// FiberNode.updateQueue = [className,'aaa',title,'bbb']
+				// style className onClick ....
+				updateFiberProps(wip.stateNode, newProps);
 			} else {
 				//构建DOM
 				const instance = createInstance(wip.type, newProps);
 				//插入DOM中
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
-				bubbleProperties(wip);
 			}
+			bubbleProperties(wip);
 			return null;
 		case HostText:
 			if (current !== null && wip.stateNode) {
 				//updata
+				const oldText = current.memoizedProps.content;
+				const newText = newProps.content;
+				console.warn(oldText, newText);
+				if (oldText !== newText) {
+					markUpdate(wip);
+				}
 			} else {
 				//构建DOM
 				const instance = createTextInstance(newProps.content);
 				//插入DOM中
 				wip.stateNode = instance;
-				bubbleProperties(wip);
 			}
+			bubbleProperties(wip);
 			return null;
 		case HostRoot:
 			bubbleProperties(wip);

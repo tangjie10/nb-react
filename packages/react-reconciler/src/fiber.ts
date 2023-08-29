@@ -20,6 +20,7 @@ export class FiberNode {
 	flags: Flags;
 	subTreeFlags: Flags;
 	updateQueue: unknown;
+	deletions: FiberNode[] | null;
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
 		this.tag = tag;
@@ -50,6 +51,7 @@ export class FiberNode {
 		//需要进行什么操作 如新增 删除 无操作
 		this.flags = NoFlags;
 		this.subTreeFlags = NoFlags;
+		this.deletions = null;
 	}
 }
 
@@ -78,8 +80,10 @@ export function createWorkInProgress(
 		current.alternate = wip;
 	} else {
 		// update
-		wip.pendingProps = current.pendingProps;
+		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags;
+		wip.subTreeFlags = NoFlags;
+		wip.deletions = null;
 	}
 
 	wip.type = current.type;
@@ -87,6 +91,7 @@ export function createWorkInProgress(
 	wip.memoizedProps = current.memoizedProps;
 	wip.memoizedState = current.memoizedState;
 	wip.child = current.child;
+	wip.deletions = null;
 	return wip;
 }
 
