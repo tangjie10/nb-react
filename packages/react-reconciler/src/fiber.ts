@@ -2,6 +2,7 @@ import { Props, Key, Ref, Type, ReactElementType } from 'shared/ReactTypes';
 import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
+import { Fragment } from './workTags';
 export class FiberNode {
 	tag: WorkTag;
 	key: Key;
@@ -24,7 +25,7 @@ export class FiberNode {
 
 	constructor(tag: WorkTag, pendingProps: Props, key: Key) {
 		this.tag = tag;
-		this.key = key;
+		this.key = key || null;
 		this.stateNode = null;
 		this.type = null;
 
@@ -108,5 +109,10 @@ export function createFiberFromElement(element: ReactElementType) {
 	}
 	const fiber = new FiberNode(fiberTag, props, key);
 	fiber.type = type;
+	return fiber;
+}
+
+export function createFiberFromFragment(element: any[], key: Key): FiberNode {
+	const fiber = new FiberNode(Fragment, element, key);
 	return fiber;
 }

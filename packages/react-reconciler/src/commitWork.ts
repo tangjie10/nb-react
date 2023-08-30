@@ -76,7 +76,7 @@ const commitMutationEffectOnFiber = (finishedWork: FiberNode) => {
 };
 
 const commitDeletion = (childToDelete: FiberNode) => {
-	let rootHostNode: FiberNode | null = null;
+	const rootChildrenToDelete: FiberNode[] = [];
 
 	//递归子树
 	commitNestedComponent(childToDelete, (unMountFiber) => {
@@ -85,14 +85,10 @@ const commitDeletion = (childToDelete: FiberNode) => {
 		}
 		switch (unMountFiber.tag) {
 			case HostComponent:
-				if (rootHostNode === null) {
-					rootHostNode = unMountFiber;
-				}
+				recordHostChildrenToDelete(rootChildrenToDelete, unMountFiber);
 				return;
 			case HostText:
-				if (rootHostNode === null) {
-					rootHostNode = unMountFiber;
-				}
+				recordHostChildrenToDelete(rootChildrenToDelete, unMountFiber);
 				return;
 			case FunctionComponent:
 				//TODO useEffect unmount
@@ -105,16 +101,39 @@ const commitDeletion = (childToDelete: FiberNode) => {
 		}
 	});
 	//移除rootHostNode的Dom
-	if (rootHostNode !== null) {
+	if (rootChildrenToDelete.length) {
 		const hostParent = getHostParent(childToDelete);
 		if (hostParent !== null) {
-			removeChild((rootHostNode as FiberNode).stateNode, hostParent);
+			rootChildrenToDelete.forEach((node) => {
+				removeChild(node.stateNode, hostParent);
+			});
 		}
 	}
 
 	childToDelete.return = null;
 	childToDelete.child = null;
 };
+
+function recordHostChildrenToDelete(
+	childrenToDelete: FiberNode[],
+	unmountFiber: FiberNode
+) {
+	// 1找到第一个root host节点
+	const lastOne = childrenToDelete[childrenToDelete.length - 1];
+	if (!lastOne) {
+		childrenToDelete.push(unmountFiber);
+	} else {
+		let node = lastOne.sibling;
+		while (node !== null) {
+			if (unmountFiber === node) {
+				childrenToDelete.push(unmountFiber);
+			}
+			node = node.sibling;
+		}
+	}
+
+	//没找到一个host节点 判断下这个节点是不是第一步找到的那个节点的兄弟节点
+}
 
 function commitNestedComponent(
 	root: FiberNode,
@@ -146,14 +165,14 @@ function commitNestedComponent(
 }
 
 const commitPlacement = (finishedWork: FiberNode) => {
-	if (__DEV__) {
-		console.warn('执行placement操作', finishedWork);
-	}
 	//parent DOM
 	const hostParent = getHostParent(finishedWork);
 
 	//host sibling
 	const sibling = getHostSibling(finishedWork);
+	if (__DEV__) {
+		console.warn('执行placement操作', finishedWork, hostParent, sibling);
+	}
 	//finishedWork  append
 	if (hostParent !== null) {
 		insertOrAppendPlacementNodeIntoContainer(finishedWork, hostParent, sibling);
@@ -240,11 +259,11 @@ function insertOrAppendPlacementNodeIntoContainer(
 
 	const child = finishedWork.child;
 	if (child !== null) {
-		insertOrAppendPlacementNodeIntoContainer(child, hostParent);
+		insertOrAppendPlacementNodeIntoContainer(child, hostParent, before);
 		let sibling = child.sibling;
 
 		while (sibling !== null) {
-			insertOrAppendPlacementNodeIntoContainer(sibling, hostParent);
+			insertOrAppendPlacementNodeIntoContainer(sibling, hostParent, before);
 			sibling = sibling.sibling;
 		}
 	}

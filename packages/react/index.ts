@@ -4,6 +4,7 @@ import currentDispatcher, {
 	resolveDispatcher
 } from './src/currentDispatcher';
 import { jsx } from './src/jsx';
+export { Fragment } from './src/jsx';
 
 export const useState: Dispatcher['useState'] = (initialState: any) => {
 	const dispatcher = resolveDispatcher();

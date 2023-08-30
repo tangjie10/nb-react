@@ -1,5 +1,8 @@
 // ReactElement 用于jsx方法的参数
-import { REACT_ELEMENT_TYPE } from '../../shared/ReactSymbols';
+import {
+	REACT_ELEMENT_TYPE,
+	REACT_FRAGMENT_TYPE
+} from '../../shared/ReactSymbols';
 import {
 	Type,
 	Key,
@@ -65,7 +68,7 @@ export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 	return ReactElement(type, key, ref, props);
 };
 
-export const jsxDEV = (type: ElementType, config: any) => {
+export const jsxDEV = (type: ElementType, config: any, ...other: any) => {
 	let key: Key = null;
 	const props: Props = {};
 	let ref: Ref = null;
@@ -92,3 +95,5 @@ export const jsxDEV = (type: ElementType, config: any) => {
 
 	return ReactElement(type, key, ref, props);
 };
+
+export const Fragment = REACT_FRAGMENT_TYPE;
