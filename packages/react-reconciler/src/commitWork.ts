@@ -49,7 +49,6 @@ export const commitMutationEffects = (finishedWork: FiberNode) => {
 
 const commitMutationEffectOnFiber = (finishedWork: FiberNode) => {
 	const flags = finishedWork.flags;
-	console.warn(finishedWork);
 	if ((flags & Placement) !== NoFlags) {
 		commitPlacement(finishedWork);
 		finishedWork.flags &= ~Placement;
@@ -70,7 +69,6 @@ const commitMutationEffectOnFiber = (finishedWork: FiberNode) => {
 
 		finishedWork.flags &= ~ChildDeletion;
 	}
-	console.warn(finishedWork);
 	//flags Update
 	//flags ChildDeletion
 };

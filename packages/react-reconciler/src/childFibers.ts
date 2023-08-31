@@ -14,7 +14,6 @@ type ExistingChildren = Map<string | number, FiberNode>;
 
 function childReconciler(shouldTrackEffects: boolean) {
 	function placeSingleChild(fiber: FiberNode) {
-		console.log(fiber);
 		if (shouldTrackEffects && fiber.alternate === null) {
 			//mount
 			fiber.flags |= Placement;
@@ -228,10 +227,6 @@ function childReconciler(shouldTrackEffects: boolean) {
 					}
 					return createFiberFromElement(element);
 			}
-
-			if (Array.isArray(element) && __DEV__) {
-				console.warn('还未实现数组类型的child', element);
-			}
 		}
 
 		if (Array.isArray(element)) {
@@ -299,7 +294,6 @@ function childReconciler(shouldTrackEffects: boolean) {
 }
 
 function useFiber(fiber: FiberNode, pendingProps: Props): FiberNode {
-	console.warn(pendingProps);
 	const clone = createWorkInProgress(fiber, pendingProps);
 	clone.index = 0;
 	clone.sibling = null;

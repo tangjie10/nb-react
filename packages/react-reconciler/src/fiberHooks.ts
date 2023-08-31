@@ -10,10 +10,12 @@ import {
 } from './updateQueue';
 import { Action } from 'shared/ReactTypes';
 import { scheduleUpdateOnFiber } from './workLoop';
+import { Lane, NoLane, requestUpdateLane } from './fiberLanes';
 
 let currentlyRenderingFiber: FiberNode | null = null;
 let workInProgressHook: Hook | null = null;
 let currentHook: Hook | null = null;
+let renderLane: Lane = NoLane;
 
 const { currentDispatcher } = internals;
 interface Hook {
@@ -22,11 +24,11 @@ interface Hook {
 	updateQueue: unknown;
 }
 
-export function renderWithHooks(wip: FiberNode) {
+export function renderWithHooks(wip: FiberNode, lane: Lane) {
 	//赋值操作
 	currentlyRenderingFiber = wip;
 	wip.memoizedState = null;
-
+	renderLane = lane;
 	const current = wip.alternate;
 
 	if (current !== null) {
@@ -46,6 +48,8 @@ export function renderWithHooks(wip: FiberNode) {
 	currentlyRenderingFiber = null;
 	workInProgressHook = null;
 	currentHook = null;
+
+	renderLane = NoLane;
 	return children;
 }
 
@@ -78,9 +82,10 @@ function dispatchSetState<T>(
 	updateQueue: UpdateQueue<T>,
 	action: Action<T>
 ) {
-	const update = createUpdate(action);
+	const lane = requestUpdateLane();
+	const update = createUpdate(action, lane);
 	enqueueUpdate(updateQueue, update);
-	scheduleUpdateOnFiber(fiber);
+	scheduleUpdateOnFiber(fiber, lane);
 }
 
 function mountWorkInProgressHook(): Hook {
@@ -156,15 +161,18 @@ const hooksDispatcherOnUpdate: Dispatcher = {
 
 function updateState<T>(initialState: (() => T) | T): [T, Dispatch<T>] {
 	const hook = updateWorkInProgressHook();
-	console.warn(hook);
 	//计算新state的逻辑
 	const queue = hook.updateQueue as UpdateQueue<T>;
 	const pending = queue.shared.pending;
+	queue.shared.pending = null;
 
 	if (pending !== null) {
-		const { memoizedState } = processUpdateQueue(hook.memoizedState, pending);
+		const { memoizedState } = processUpdateQueue(
+			hook.memoizedState,
+			pending,
+			renderLane
+		);
 		hook.memoizedState = memoizedState;
 	}
-	console.warn(hook);
 	return [hook.memoizedState, queue.dispatch as Dispatch<T>];
 }

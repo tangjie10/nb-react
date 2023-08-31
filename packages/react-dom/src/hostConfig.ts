@@ -8,7 +8,6 @@ export type Instance = Element;
 export type TextInstance = Text;
 
 export function createInstance(type: string, props: any): Instance {
-	console.log(props);
 	const element = document.createElement(type) as unknown;
 	updateFiberProps(element as DOMElement, props);
 	return element as DOMElement;
@@ -18,7 +17,6 @@ export function appendInitialChild(
 	parent: Instance | Container,
 	child: Instance
 ) {
-	console.log(parent, child);
 	parent.appendChild(child);
 }
 
@@ -62,3 +60,10 @@ export function insertChildToContainer(
 ) {
 	container.insertBefore(child, before);
 }
+
+export const scheduleMicro =
+	typeof queueMicrotask === 'function'
+		? queueMicrotask
+		: typeof Promise === 'function'
+		? (callback: (...args: any) => void) => Promise.resolve(null).then(callback)
+		: setTimeout;

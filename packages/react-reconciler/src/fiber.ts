@@ -3,6 +3,9 @@ import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
 import { Fragment } from './workTags';
+import { Lane, Lanes, NoLane, NoLanes } from './fiberLanes';
+import { createElement } from 'react';
+import { REACT_ELEMENT_TYPE, REACT_FRAGMENT_TYPE } from 'shared/ReactSymbols';
 export class FiberNode {
 	tag: WorkTag;
 	key: Key;
@@ -60,11 +63,15 @@ export class FiberRootNode {
 	container: Container; //宿主环境不同  container不同 如果是浏览器环境 那代表的是dom节点
 	current: FiberNode;
 	finishedWork: FiberNode | null;
+	pendingLanes: Lanes;
+	finishedLane: Lane;
 	constructor(container: Container, hostRootFiber: FiberNode) {
 		this.container = container;
 		this.current = hostRootFiber;
 		hostRootFiber.stateNode = this;
 		this.finishedWork = null;
+		this.pendingLanes = NoLanes;
+		this.finishedLane = NoLane;
 	}
 }
 

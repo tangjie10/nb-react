@@ -24,7 +24,6 @@ function markUpdate(fiber: FiberNode) {
 export const completeWork = (wip: FiberNode) => {
 	const newProps = wip.pendingProps;
 	const current = wip.alternate;
-	console.warn('---------------');
 	switch (wip.tag) {
 		case HostComponent:
 			if (current !== null && wip.stateNode) {
@@ -47,7 +46,6 @@ export const completeWork = (wip: FiberNode) => {
 				//updata
 				const oldText = current.memoizedProps.content;
 				const newText = newProps.content;
-				console.warn(oldText, newText);
 				if (oldText !== newText) {
 					markUpdate(wip);
 				}

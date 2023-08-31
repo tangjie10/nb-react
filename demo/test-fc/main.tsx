@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import ReactDOM from 'react-dom/client';
-console.log([
-	<li key="1" ref="333">
-		1
-	</li>,
-	<li key="2">2</li>,
-	<li key="3">3</li>
-]);
+// console.log([
+// 	<li key="1" ref="333">
+// 		1
+// 	</li>,
+// 	<li key="2">2</li>,
+// 	<li key="3">3</li>
+// ]);
 
 const rootHost = ReactDOM.createRoot(
 	document.getElementById('root') as Element
@@ -19,11 +19,20 @@ function App() {
 	const [num, setNum] = useState(0);
 	const arr =
 		num % 2 === 0
-			? [<li key="5">1</li>, <li key="6">2</li>, <li key="7">3</li>]
-			: [<li key="6">3</li>, <li key="5">2</li>, <li key="7">1</li>];
+			? [<li key="5">5</li>, <li key="6">6</li>, <li key="7">7</li>]
+			: [<li key="6">6</li>, <li key="5">5</li>, <li key="7">7</li>];
 	window.setName = setName;
+
+	const testFn = () => {
+		setNum((num) => num + 1);
+		setNum((num) => num + 1);
+		setNum((num) => num + 1);
+		setNum((num) => num + 1);
+		setNum((num) => num + 1);
+	};
+
 	return (
-		<ul onClickCapture={() => setNum(num + 1)}>
+		<ul onClickCapture={testFn}>
 			<>
 				<li>1</li>
 				<li>2</li>
