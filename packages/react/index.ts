@@ -4,12 +4,25 @@ import currentDispatcher, {
 	resolveDispatcher
 } from './src/currentDispatcher';
 import { jsx } from './src/jsx';
+import { EffectCallback, EffectDeps } from 'react-reconciler/src/fiberHooks';
 export { Fragment } from './src/jsx';
 
 export const useState: Dispatcher['useState'] = (initialState: any) => {
 	const dispatcher = resolveDispatcher();
 	if (dispatcher) {
 		return dispatcher.useState(initialState);
+	} else {
+		throw new Error('dispatcher为null');
+	}
+};
+
+export const useEffect: Dispatcher['useEffect'] = (
+	create: EffectCallback | void,
+	deps: EffectDeps
+) => {
+	const dispatcher = resolveDispatcher();
+	if (dispatcher) {
+		return dispatcher.useEffect(create, deps);
 	} else {
 		throw new Error('dispatcher为null');
 	}

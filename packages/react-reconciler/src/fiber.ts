@@ -4,8 +4,6 @@ import { Flags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
 import { Fragment } from './workTags';
 import { Lane, Lanes, NoLane, NoLanes } from './fiberLanes';
-import { createElement } from 'react';
-import { REACT_ELEMENT_TYPE, REACT_FRAGMENT_TYPE } from 'shared/ReactSymbols';
 export class FiberNode {
 	tag: WorkTag;
 	key: Key;
